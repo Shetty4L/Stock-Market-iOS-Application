@@ -6,14 +6,20 @@
         <script src="https://code.highcharts.com/stock/highstock.js"></script>
         <script>
             var plotPrice = function(json) {
+                
+                var stock_name = json.symbol;
                 var payload = json["payload"];
+                if(!payload || !payload.priceData || !payload.volumeData) {
+                    displayError("Error loading price and volume data");
+                    return;
+                }
                 for(var i in payload.dates) {
                     payload.dates[i] = new Date(payload.dates[i]);
                 }
                 if(Highcharts.charts.length) {
                     Highcharts.charts.pop();
                 }
-                Highcharts.charts[0] = new Highcharts.chart('current-stock-chart', {
+                Highcharts.charts[0] = new Highcharts.chart('chart', {
                     chart: {
                         type: 'area'
                     },
@@ -112,9 +118,296 @@
                     id: "price"
                 });
             }
+        
+            var plotIndicator = function(payload) {
+                if(!payload || !payload.symbol || !payload.indicator || !payload["payload"]) {
+                    displayError("Failed to load " + type + " data");
+                    return;
+                }
+                var stock_name = payload.symbol;
+                var type = payload.indicator.toLowerCase();
+                var indicatorData = payload["payload"];
+                var series = [];
+                var color1 = '#da001e';
+                var color2 = '#2f5ef3';
+                var color3 = '#e3d849';
+                var chartTitle;
+                switch(type) {
+                    case 'sma': chartTitle = 'Simple Moving Average (SMA)'; break;
+                    case 'ema': chartTitle = 'Exponential Moving Average (EMA)'; break;
+                    case 'stoch': chartTitle = 'Stochastic Oscillator (STOCH)'; break;
+                    case 'rsi': chartTitle = 'Relative Strength Index (RSI)'; break;
+                    case 'adx': chartTitle = 'Average Directional Movement Index (ADX)'; break;
+                    case 'cci': chartTitle = 'Commodity Channel Index (CCI)'; break;
+                    case 'bbands': chartTitle = 'Bollinger Bands (BBANDS)'; break;
+                    case 'macd': chartTitle = 'Moving Average Convergence/Divergence (MACD)'; break;
+                }
+                var line1,line2,line3;
+                if(indicatorData.values.data.length && indicatorData.values2.data.length && indicatorData.values3.data.length) {
+                    line1 = {
+                        name: stock_name + ' ' + indicatorData.values.key,
+                        data: indicatorData.values.data.slice(),
+                        color: color1,
+                        type: 'spline',
+                        tooltip: {
+                            pointFormat: "<b>" + stock_name + "</b>: {point.y:.2f}",
+                            headerFormat: '{point.key}<br/>'
+                        },
+                        pointStart: indicatorData.startDate,
+                        pointInterval: 24 * 3600 * 1000
+                    };
+                    line2 = {
+                        name: stock_name + ' ' + indicatorData.values2.key,
+                        data: indicatorData.values2.data.slice(),
+                        color: color2,
+                        type: 'spline',
+                        tooltip: {
+                            pointFormat: "<b>" + stock_name + "</b>: {point.y:.2f}",
+                            headerFormat: '{point.key}<br/>'
+                        },
+                        pointStart: indicatorData.startDate,
+                        pointInterval: 24 * 3600 * 1000
+                    };
+                    line3 = {
+                        name: stock_name + ' ' + indicatorData.values3.key,
+                        data: indicatorData.values3.data.slice(),
+                        color: color3,
+                        type: 'spline',
+                        tooltip: {
+                            pointFormat: "<b>" + stock_name + "</b>: {point.y:.2f}",
+                            headerFormat: '{point.key}<br/>'
+                        },
+                        pointStart: indicatorData.startDate,
+                        pointInterval: 24 * 3600 * 1000
+                    };
+                    series.push(line1);
+                    series.push(line2);
+                    series.push(line3);
+                    
+                } else if(indicatorData.values.data.length && indicatorData.values2.data.length) {
+                    line1 = {
+                        name: stock_name + ' ' + indicatorData.values.key,
+                        data: indicatorData.values.data.slice(),
+                        color: color1,
+                        type: 'spline',
+                        tooltip: {
+                            pointFormat: "<b>" + stock_name + "</b>: {point.y:.2f}",
+                            headerFormat: '{point.key}<br/>'
+                        },
+                        pointStart: indicatorData.startDate,
+                        pointInterval: 24 * 3600 * 1000
+                    };
+                    line2 = {
+                        name: stock_name + ' ' + indicatorData.values2.key,
+                        data: indicatorData.values2.data.slice(),
+                        color: color2,
+                        type: 'spline',
+                        tooltip: {
+                            pointFormat: "<b>" + stock_name + "</b>: {point.y:.2f}",
+                            headerFormat: '{point.key}<br/>'
+                        },
+                        pointStart: indicatorData.startDate,
+                        pointInterval: 24 * 3600 * 1000
+                    };
+                    series.push(line1);
+                    series.push(line2);
+                } else {
+                    var name = indicatorData.values.key;
+                    line1 = {
+                        name: stock_name + ' ' + name,
+                        data: indicatorData.values.data.slice(),
+                        color: color1,
+                        type: 'spline',
+                        tooltip: {
+                            pointFormat: "<b>" + stock_name + "</b>: {point.y:.2f}",
+                            headerFormat: '{point.key}<br/>'
+                        },
+                        pointStart: indicatorData.startDate,
+                        pointInterval: 24 * 3600 * 1000
+                    };
+                    series.push(line1);
+                }
+                
+                if(Highcharts.charts.length) {
+                    Highcharts.charts.pop();
+                }
+                Highcharts.charts[0] = new Highcharts.chart('chart', {
+                    global: {
+                    useUTC: true
+                    },
+                    title: {
+                    text: chartTitle
+                    },
+                    subtitle: {
+                    text: "<a target='_blank' href='https://www.alphavantage.co/' style='text-decoration:none;'>Source: Alpha Vantage</a>",
+                    useHTML: true
+                    },
+                    yAxis: [{
+                            title: {
+                            text: type.toUpperCase()
+                            },
+                            }],
+                    xAxis: {
+                    type: 'datetime',
+                    labels: {
+                    format: '{value:%m/%d}',
+                    style: {
+                    fontSize: '8px'
+                    },
+                    rotation: 90
+                    },
+                    ordinal: true,
+                    tickPositioner: function() {
+                    var minDate = this.min,
+                    maxDate = this.max-24*3600*1000;
+                    
+                    var tickInterval = 14;
+                    
+                    var cur_date = maxDate;
+                    var positions = [];
+                    for(var i=indicatorData.values.data.length-1;i>=0;i=i-tickInterval) {
+                    cur_date = indicatorData.values.data[i][0];
+                    if(cur_date<=maxDate && cur_date>=minDate)
+                    positions.push(cur_date);
+                    }
+                    positions.info = this.tickPositions.info;
+                    return positions;
+                    }
+                    },
+                    id: type,
+                    plotOptions: {
+                    series: {
+                    animation: true
+                    }
+                    },
+                    series: series
+                    });
+            }
+        
+            var plotHistoricData = function(stockData) {
+                var payload = stockData.fullData;
+                var startDate = stockData.payload.startDate;
+                if(!payload || !payload.priceData || !startDate) {
+                    displayError("Failed to load historic data");
+                    return;
+                }
+                var button;
+                    button = [{
+                      type: 'week',
+                      count: 1,
+                      text: '1w'
+                      }, {
+                      type: 'month',
+                      count: 1,
+                      text: '1m'
+                      }, {
+                      type: 'month',
+                      count: 3,
+                      text: '3m'
+                      }, {
+                      type: 'month',
+                      count: 6,
+                      text: '6m'
+                      }, {
+                      type: 'year',
+                      count: 1,
+                      text: '1y'
+                      }, {
+                      type: 'ytd',
+                      text: 'YTD'
+                      }, {
+                      type: 'all',
+                      text: 'All'
+                      }];
+                var stockChart = new Highcharts.stockChart('chart', {
+                   chart: {
+                   type: 'area',
+                   },
+                   rangeSelector: {
+                   selected: 0,
+                   buttons: button
+                   },
+                   title: {
+                   text: stockData.symbol.toUpperCase() + " Stock Value"
+                   },
+                   subtitle: {
+                   text: "<a target='_blank' href='https://www.alphavantage.co/' style='text-decoration:none;'>Source: Alpha Vantage</a>",
+                   useHTML: true
+                   },
+                   yAxis: [{
+                           title: {
+                           text: 'Stock Price'
+                           }
+                           }],
+                   xAxis: {
+                   type: 'datetime',
+                   endOnTick: true,
+                   units: [[
+                            'day',
+                            [1]
+                            ], [
+                                'week',
+                                [1]
+                                ], [
+                                    'month',
+                                    [1, 3, 6]
+                                    ], [
+                                        'year',
+                                        null
+                                        ]],
+                   minTickInterval: 24 * 3600 * 1000,
+                   minRange: 7 * 24 * 3600 * 1000
+                   },
+                   plotOptions: {
+                   area: {
+                   fillColor: '#e6e6ff',
+                   opacity: 0.5,
+                   pointWidth: 0.2,
+                   borderWidth: 0.2,
+                   area: 1400
+                   }
+                   },
+                   tooltip: {
+                   headerFormat: '{point.key}<br/>',
+                   pointFormat: '<span style="color:{point.color}">\u25CF</span> ' + stockData.symbol + ": <b>{point.y:.2f}</b>",
+                   split: false,
+                   useHTML: true
+                   },
+                   series: [{
+                            name: 'Price',
+                            data: payload.priceData,
+                            pointStart: startDate,
+                            pointInterval: 24 * 3600 * 1000,
+                            color: '#00F',
+                            type: 'area'
+                            }],
+                   global: {
+                   useUTC: true
+                   }
+                   });
+            }
+        
+            var displayError = function(msg) {
+                var error = document.getElementById("errorMsg");
+                error.style.display = "block";
+                error.innerHTML = "<h1>" + msg + "</h1>";
+            }
+        
+            var returnDataForFacebook = function(stock) {
+                var options = Highcharts.charts[0].options;
+                var exportUrl = 'http://export.highcharts.com/';
+                var data = {
+                    options: JSON.stringify(options),
+                    filename: stock.symbol,
+                    type: 'image/png',
+                    async: true
+                };
+                return data;
+            }
         </script>
     </head>
     <body>
-        <div id="current-stock-chart"></div>
+        <div id="errorMsg" style="display:none;width:100%;height:50px"></div>
+        <div id="chart"></div>
     </body>
 </html>

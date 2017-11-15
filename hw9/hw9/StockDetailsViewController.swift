@@ -29,7 +29,11 @@ class StockDetailsViewController: UIViewController {
         Alamofire.request(getStockQuoteUrl + "outputsize=full&stockSymbol=" + stockSymbol).responseJSON { response in
             if let json = response.result.value as? Dictionary<String, Any> {
                 self.stockData = json;
-                self.navigationItem.title = self.stockData["symbol"] as? String;
+                if let stockSymbol = self.stockData["symbol"] {
+                    self.navigationItem.title = stockSymbol as? String;
+                } else {
+                    self.navigationItem.title = "ERROR";
+                }
             }
             SwiftSpinner.hide();
             // Setup Segmented Control
@@ -85,6 +89,7 @@ class StockDetailsViewController: UIViewController {
         
         // Instantiate View Controller
         var viewController = storyboard.instantiateViewController(withIdentifier: "HistoricalStockViewController") as! HistoricalStockViewController;
+        viewController.stockData = self.stockData;
         
         // Add View Controller as Child View Controller
         self.add(asChildViewController: viewController);

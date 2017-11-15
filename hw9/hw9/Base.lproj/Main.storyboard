@@ -13,6 +13,7 @@
     <customFonts key="customFonts">
         <array key="HelveticaNeue.ttc">
             <string>HelveticaNeue-Bold</string>
+            <string>HelveticaNeue-Medium</string>
         </array>
     </customFonts>
     <scenes>
@@ -210,7 +211,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="4ck-T5-SP2">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="537"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
@@ -347,7 +348,7 @@
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Indicators" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vfl-nG-6Ud">
                                         <rect key="frame" x="21" y="447" width="123" height="21"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="23"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="23"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
@@ -375,6 +376,10 @@
                                             <wkPreferences key="preferences"/>
                                         </wkWebViewConfiguration>
                                     </wkWebView>
+                                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="Yt4-j4-ucL">
+                                        <rect key="frame" x="169" y="471.5" width="37" height="37"/>
+                                        <color key="color" red="0.20784313730000001" green="0.90588235289999997" blue="0.63529411759999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </activityIndicatorView>
                                 </subviews>
                             </scrollView>
                         </subviews>
@@ -382,6 +387,8 @@
                             <constraint firstItem="SVc-cE-Ovl" firstAttribute="trailing" secondItem="ftD-rV-QfU" secondAttribute="trailing" id="4BS-mu-Sil"/>
                             <constraint firstItem="SVc-cE-Ovl" firstAttribute="bottom" secondItem="ftD-rV-QfU" secondAttribute="bottom" id="DOs-r5-f27"/>
                             <constraint firstItem="SVc-cE-Ovl" firstAttribute="leading" secondItem="ftD-rV-QfU" secondAttribute="leading" id="Y23-Rq-NOc"/>
+                            <constraint firstItem="Yt4-j4-ucL" firstAttribute="centerY" secondItem="ftD-rV-QfU" secondAttribute="centerY" id="ekb-YL-t7X"/>
+                            <constraint firstItem="Yt4-j4-ucL" firstAttribute="centerX" secondItem="ftD-rV-QfU" secondAttribute="centerX" id="mMw-md-wfw"/>
                             <constraint firstItem="SVc-cE-Ovl" firstAttribute="top" secondItem="ftD-rV-QfU" secondAttribute="top" id="q0Z-yl-KzX"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="ftD-rV-QfU"/>
@@ -389,6 +396,7 @@
                     <size key="freeformSize" width="375" height="1000"/>
                     <connections>
                         <outlet property="changeButton" destination="0eh-Tv-C8L" id="0Bf-nL-uCg"/>
+                        <outlet property="currentStockActivityIndicator" destination="Yt4-j4-ucL" id="Qvc-NG-PiM"/>
                         <outlet property="currentStockScrollView" destination="SVc-cE-Ovl" id="DG6-dt-d4C"/>
                         <outlet property="currentStockTableView" destination="kzC-av-7ss" id="IVH-Zy-DG2"/>
                         <outlet property="facebookButton" destination="Z5c-Zb-2yt" id="6vy-YD-b1P"/>
@@ -408,9 +416,22 @@
                     <view key="view" contentMode="scaleToFill" id="VFQ-O6-0H7">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="0.47118062984193076" green="0.28418936568804753" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <subviews>
+                            <wkWebView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Nec-w9-zqk">
+                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <wkWebViewConfiguration key="configuration">
+                                    <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
+                                    <wkPreferences key="preferences"/>
+                                </wkWebViewConfiguration>
+                            </wkWebView>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="0u4-Fl-jnA"/>
                     </view>
+                    <connections>
+                        <outlet property="historicalStockWebView" destination="Nec-w9-zqk" id="eM5-pu-ZL8"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="D83-Qc-9jU" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
