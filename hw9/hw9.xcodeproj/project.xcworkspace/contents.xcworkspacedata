@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <FileRef
+      location = "group:../Pods/Pods.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:../Carthage/Checkouts/Alamofire.xcarchive">
+   </FileRef>
+   <FileRef
+      location = "group:../Carthage/Build/iOS/Alamofire.framework">
+   </FileRef>
+   <FileRef
+      location = "group:/Users/shetty4l/Sites/csci571/ISYDFQ/hw9/hw9/hw9/FavoritesTableViewCell.swift">
+   </FileRef>
+   <FileRef
+      location = "group:../../../../../../Pictures/icons8-refresh (1).png">
+   </FileRef>
+   <FileRef
+      location = "group:../../../../../../Pictures/icons8-refresh (2).png">
+   </FileRef>
+   <FileRef
+      location = "group:../../../../../../Pictures/icons8-refresh.png">
+   </FileRef>
+   <FileRef
+      location = "group:/Users/shetty4l/Sites/csci571/ISYDFQ/hw9/hw9/hw9/Assets.xcassets">
+   </FileRef>
+   <FileRef
+      location = "self:hw9.xcodeproj">
+   </FileRef>
+</Workspace>

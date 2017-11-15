@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+        <meta name="viewport" content="width=device-width; initial-scale=1.0">
+        <script src="https://code.highcharts.com/stock/highstock.js"></script>
+        <script>
+            var plotPrice = function(json) {
+                var payload = json["payload"];
+                for(var i in payload.dates) {
+                    payload.dates[i] = new Date(payload.dates[i]);
+                }
+                if(Highcharts.charts.length) {
+                    Highcharts.charts.pop();
+                }
+                Highcharts.charts[0] = new Highcharts.chart('current-stock-chart', {
+                    chart: {
+                        type: 'area'
+                    },
+                    title: {
+                        text: json.symbol.toUpperCase() + " Stock Price and Volume"
+                        },
+                        subtitle: {
+                        text: "<a target='_blank' href='https://www.alphavantage.co/' style='text-decoration:none;'>Source: Alpha Vantage</a>",
+                        useHTML: true
+                    },
+                    yAxis: [{
+                            title: {
+                            text: 'Stock Price'
+                        },
+                            alignTicks: false,
+                            min: payload.minPrice-5,
+                            max: payload.maxPrice+5
+                        }, {
+                            title: {
+                            text: 'Volume'
+                        },
+                            min: payload.minVolume,
+                            max: payload.maxVolume,
+                            // tickInterval: 50000000,
+                            tickLength: 0,
+                            gridLineColor: 'transparent',
+                            labels : {
+                            formatter: function() {
+                                return this.value/1000000 + ' M';
+                            }
+                        },
+                        opposite: true,
+                    }],
+                    xAxis: {
+                        type: 'datetime',
+                        labels: {
+                            format: '{value:%m/%d}',
+                            style: {
+                                fontSize: '9px'
+                            },
+                            rotation: 90
+                        },
+                        ordinal: true,
+                        tickPositioner: function() {
+                            var minDate = this.min,
+                            maxDate = this.max-24*3600*1000;
+                        
+                            var tickInterval = 14;
+                        
+                            var cur_date = maxDate;
+                            var positions = [];
+                            for(var i=payload.priceData.length-1;i>=0;i=i-tickInterval) {
+                                cur_date = payload.priceData[i][0];
+                                if(cur_date<=maxDate && cur_date>=minDate)
+                                    positions.push(cur_date);
+                            }
+                            positions.info = this.tickPositions.info;
+                            return positions;
+                        }
+                    },
+                    plotOptions: {
+                        area: {
+                            fillColor: '#e6e6ff',
+                            opacity: 0.5,
+                            pointWidth: 0.2,
+                            borderWidth: 0.2
+                        },
+                    },
+                    series: [{
+                             name: 'Price',
+                             data: payload.priceData,
+                             color: '#00F',
+                             type: 'area',
+                             tooltip: {
+                                 pointFormat: "<b>" + json.symbol + "</b>: {point.y:.2f}",
+                                 headerFormat: '{point.key}<br/>'
+                             },
+                             pointStart: payload.startDate,
+                             pointInterval: 24 * 3600 * 1000
+                         }, {
+                             name: 'Volume',
+                             data: payload.volumeData,
+                             type: 'column',
+                             color: '#F00',
+                             yAxis: 1,
+                             tooltip: {
+                                 valueSuffix: '',
+                                 headerFormat: '{point.key}<br/>'
+                             },
+                             pointStart: payload.startDate,
+                             pointInterval: 24 * 3600 * 1000
+                     }],
+                    global: {
+                        useUTC: true
+                    },
+                    id: "price"
+                });
+            }
+        </script>
+    </head>
+    <body>
+        <div id="current-stock-chart"></div>
+    </body>
+</html>
