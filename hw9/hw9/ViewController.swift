@@ -29,7 +29,7 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         
         var favorite = self.favorites[indexPath.row];
         cell.stockNameLabel.text = favorite["symbol"] as? String;
-        cell.priceLabel.text = String(format:"%.2f", favorite["price"] as! Float);
+        cell.priceLabel.text = String(format:"$%.2f", favorite["price"] as! Float);
         cell.changeLabel.text = String(format:"%.2f (%.2f%%)", favorite["change"] as! Float, favorite["change_percent"] as! Float);
         
         return cell;
@@ -171,28 +171,26 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
             }
         }
         
-        // Set up favorites table
-        if let path = Bundle.main.path(forResource: "Favorites", ofType: "plist"), let dict = NSDictionary(contentsOfFile: path) as? [String: AnyObject] {
-            for (key,value) in dict {
-                if key != "id" {
-                    var dict = Dictionary<String, Any>();
-                    dict["symbol"] = key.uppercased();
-                    dict["price"] = value["price"] as! Float;
-                    dict["change"] = value["change"] as! Float;
-                    dict["change_percent"] = value["change_percent"] as! Float;
-                    dict["id"] = value["id"] as! Float;
-                    self.favorites.append(dict);
-                }
-            }
-        }
-        self.favorites.sort { ($0["id"] as! Float) < ($1["id"] as! Float)};
-        
         // Adding tap gesture recognizer to dismiss keyboard
         self.hideKeyboardWhenTappedAround();
     }
     
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.setNavigationBarHidden(true, animated: true);
+        // Set up favorites table
+        self.favorites.removeAll(keepingCapacity: true);
+        var favorites = UserDefaults.standard.object(forKey: "favorites") as? Dictionary<String, Dictionary<String, Any>>;
+        for (_,value) in favorites! {
+            var dict = Dictionary<String, Any>();
+            dict["id"] = value["id"] as! Float;
+            dict["symbol"] = value["symbol"] as! String;
+            dict["price"] = value["price"] as! Float;
+            dict["change"] = value["change"] as! Float;
+            dict["change_percent"] = value["change_percent"] as! Float;
+            self.favorites.append(dict);
+        }
+        self.favorites.sort { ($0["id"] as! Float) < ($1["id"] as! Float)};
+        self.favoritesTableView.reloadData();
     }
 
     override func viewWillDisappear(_ animated: Bool) {

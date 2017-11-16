@@ -159,19 +159,41 @@ class CurrentStockViewController: UIViewController, UITableViewDataSource, UITab
     
     @IBAction func toggleFavorite(_ sender: Any) {
         print("Toggle Favorite");
-//        let favorite: Favorite = Favorite(id: 0, stockSymbol: self.stockData["symbol"] as! String, price: self.stockData["last_price"] as! Float, change: self.stockData["change"] as! Float, changePercent: self.stockData["change_percent"] as! Float);
-        let plistFileName = "Favorites.plist";
-        let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true);
-        let documentPath = paths[0] as NSString;
-        let plistPath = documentPath.appendingPathComponent(plistFileName);
-        var favoritesArray: NSMutableArray?;
-//        if let path = Bundle.main.path(forResource: "Favorites", ofType: "plist") {
-//            favoritesArray = NSMutableArray.init(contentsOfFile: path);
-//        }
-//        if favoritesArray.count == 0 {
-//
-//        }
-        
+
+        let userDefaults = UserDefaults.standard;
+        if userDefaults.integer(forKey: "id") == 0 {
+            var dict = Dictionary<String, Any>();
+            dict["id"] = 1;
+            dict["symbol"] = self.stockData["symbol"] as! String;
+            dict["price"] = self.stockData["last_price"] as! Float;
+            dict["change"] = self.stockData["change"] as! Float;
+            dict["change_percent"] = self.stockData["change_percent"] as! Float;
+            
+            let favorites: [String: Any] = [self.stockData["symbol"] as! String: dict];
+            userDefaults.setValue(favorites, forKeyPath: "favorites");
+            userDefaults.set(1, forKey: "id");
+        } else {
+            if var favorites = userDefaults.object(forKey: "favorites") as? Dictionary<String, Any> {
+                if let _ = favorites[self.stockData["symbol"] as! String] {
+                    favorites.removeValue(forKey: self.stockData["symbol"] as! String);
+                    userDefaults.setValue(favorites, forKeyPath: "favorites");
+                    userDefaults.set(userDefaults.integer(forKey: "id")-1, forKey: "id");
+                    self.favoriteButton.setImage(UIImage(named: "fav.png"), for: .normal);
+                } else {
+                    var dict = Dictionary<String, Any>();
+                    dict["id"] = userDefaults.integer(forKey: "id")+1;
+                    dict["symbol"] = self.stockData["symbol"] as! String;
+                    dict["price"] = self.stockData["last_price"] as! Float;
+                    dict["change"] = self.stockData["change"] as! Float;
+                    dict["change_percent"] = self.stockData["change_percent"] as! Float;
+                    
+                    favorites[self.stockData["symbol"] as! String] = dict;
+                    userDefaults.setValue(favorites, forKeyPath: "favorites");
+                    userDefaults.set(userDefaults.integer(forKey: "id")+1, forKey: "id");
+                    self.favoriteButton.setImage(UIImage(named: "filled-fav.png"), for: .normal);
+                }
+            }
+        }
         
         
     }
@@ -202,6 +224,14 @@ class CurrentStockViewController: UIViewController, UITableViewDataSource, UITab
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        
+        // Set up favorite button
+        let favorites = UserDefaults.standard.object(forKey: "favorites") as? Dictionary<String, Any>;
+        if let _ = favorites![self.stockData["symbol"] as! String] {
+            self.favoriteButton.setImage(UIImage(named: "filled-fav.png"), for: .normal);
+        } else {
+            self.favoriteButton.setImage(UIImage(named: "fav.png"), for: .normal);
+        }
         
         // Set up acitivity indicator
         self.currentStockActivityIndicator.hidesWhenStopped = true;
@@ -257,47 +287,47 @@ class CurrentStockViewController: UIViewController, UITableViewDataSource, UITab
     }
     
     private func initStockTableValues() {
-        guard let stockName = self.stockData["symbol"] else {
+        guard let stockName = self.stockData?["symbol"] else {
             dataLoadFailureToast();
             return;
         }
         
-        guard let last_price = self.stockData["last_price"] else {
+        guard let last_price = self.stockData?["last_price"] else {
             dataLoadFailureToast();
             return;
         }
         
-        guard let change = self.stockData["change"] else {
+        guard let change = self.stockData?["change"] else {
             dataLoadFailureToast();
             return;
         }
         
-        guard let change_percent = self.stockData["change_percent"] else {
+        guard let change_percent = self.stockData?["change_percent"] else {
             dataLoadFailureToast();
             return;
         }
         
-        guard let timestamp = self.stockData["timestamp"] else {
+        guard let timestamp = self.stockData?["timestamp"] else {
             dataLoadFailureToast();
             return;
         }
         
-        guard let open = self.stockData["open"] else {
+        guard let open = self.stockData?["open"] else {
             dataLoadFailureToast();
             return;
         }
         
-        guard let close = self.stockData["close"] else {
+        guard let close = self.stockData?["close"] else {
             dataLoadFailureToast();
             return;
         }
         
-        guard let range = self.stockData["range"] else {
+        guard let range = self.stockData?["range"] else {
             dataLoadFailureToast();
             return;
         }
         
-        guard let volume = self.stockData["volume"] else {
+        guard let volume = self.stockData?["volume"] else {
             dataLoadFailureToast();
             return;
         }
