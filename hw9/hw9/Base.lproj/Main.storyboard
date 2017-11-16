@@ -294,14 +294,6 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Z5c-Zb-2yt">
-                                        <rect key="frame" x="285" y="16" width="35" height="35"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <state key="normal" image="icons8-facebook.png"/>
-                                        <connections>
-                                            <action selector="shareOnFacebook:" destination="ypc-RN-uba" eventType="touchUpInside" id="Phf-PR-P2s"/>
-                                        </connections>
-                                    </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Uy7-tm-e2Y">
                                         <rect key="frame" x="328" y="18" width="30" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -380,6 +372,14 @@
                                         <rect key="frame" x="169" y="471.5" width="37" height="37"/>
                                         <color key="color" red="0.20784313730000001" green="0.90588235289999997" blue="0.63529411759999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     </activityIndicatorView>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Z5c-Zb-2yt">
+                                        <rect key="frame" x="270" y="16" width="35" height="35"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" image="icons8-facebook.png"/>
+                                        <connections>
+                                            <action selector="shareOnFacebook:" destination="ypc-RN-uba" eventType="touchUpInside" id="Phf-PR-P2s"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                             </scrollView>
                         </subviews>

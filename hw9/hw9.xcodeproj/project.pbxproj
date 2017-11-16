@@ -47,6 +47,8 @@
 		B566FD691FBCE7DA00EB6B88 /* FacebookLogin.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B566FD641FBCE6A600EB6B88 /* FacebookLogin.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B566FD6A1FBCE7DA00EB6B88 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B566FD651FBCE6A600EB6B88 /* FBSDKLoginKit.framework */; };
 		B566FD6B1FBCE7DA00EB6B88 /* FBSDKLoginKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B566FD651FBCE6A600EB6B88 /* FBSDKLoginKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		B566FD7F1FBD244500EB6B88 /* FavoriteClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = B566FD7E1FBD244400EB6B88 /* FavoriteClass.swift */; };
+		B566FD821FBD396A00EB6B88 /* Favorites.plist in Resources */ = {isa = PBXBuildFile; fileRef = B566FD811FBD309300EB6B88 /* Favorites.plist */; };
 		C9FA45705F9131968473DEAD /* Pods_hw9.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D2FC46954F413222B11FB108 /* Pods_hw9.framework */; };
 /* End PBXBuildFile section */
 
@@ -119,6 +121,9 @@
 		B566FD541FBCD8D500EB6B88 /* FacebookCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookCore.framework; path = Carthage/Build/iOS/FacebookCore.framework; sourceTree = "<group>"; };
 		B566FD641FBCE6A600EB6B88 /* FacebookLogin.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookLogin.framework; path = Carthage/Build/iOS/FacebookLogin.framework; sourceTree = "<group>"; };
 		B566FD651FBCE6A600EB6B88 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKLoginKit.framework; path = Carthage/Build/iOS/FBSDKLoginKit.framework; sourceTree = "<group>"; };
+		B566FD731FBD113C00EB6B88 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		B566FD7E1FBD244400EB6B88 /* FavoriteClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteClass.swift; sourceTree = "<group>"; };
+		B566FD811FBD309300EB6B88 /* Favorites.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Favorites.plist; sourceTree = "<group>"; };
 		D2FC46954F413222B11FB108 /* Pods_hw9.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_hw9.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -155,6 +160,7 @@
 		6B2BB2640F13BAEF8517EAA7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B566FD731FBD113C00EB6B88 /* CoreData.framework */,
 				B566FD641FBCE6A600EB6B88 /* FacebookLogin.framework */,
 				B566FD651FBCE6A600EB6B88 /* FBSDKLoginKit.framework */,
 				B566FD511FBCD8D500EB6B88 /* Bolts.framework */,
@@ -201,6 +207,8 @@
 		B566FCCB1FBA61A500EB6B88 /* hw9 */ = {
 			isa = PBXGroup;
 			children = (
+				B566FD811FBD309300EB6B88 /* Favorites.plist */,
+				B566FD7E1FBD244400EB6B88 /* FavoriteClass.swift */,
 				B566FD2D1FBBA72E00EB6B88 /* NewsTableViewCell.swift */,
 				B566FD2A1FBB7A9500EB6B88 /* CurrentStockTableViewCell.swift */,
 				B566FD1E1FBB4F5500EB6B88 /* NewsViewController.swift */,
@@ -330,6 +338,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B566FD821FBD396A00EB6B88 /* Favorites.plist in Resources */,
 				B566FD421FBCB2AA00EB6B88 /* Up.png in Resources */,
 				B566FCF81FBA7E0C00EB6B88 /* icons8-refresh (2).png in Resources */,
 				B566FD3B1FBBC2FF00EB6B88 /* current-stock-indicator.html in Resources */,
@@ -427,6 +436,7 @@
 				B566FCCF1FBA61A500EB6B88 /* ViewController.swift in Sources */,
 				B566FCFB1FBA81D800EB6B88 /* FavoritesTableViewCell.swift in Sources */,
 				B566FD2B1FBB7A9600EB6B88 /* CurrentStockTableViewCell.swift in Sources */,
+				B566FD7F1FBD244500EB6B88 /* FavoriteClass.swift in Sources */,
 				B566FD1F1FBB4F5500EB6B88 /* NewsViewController.swift in Sources */,
 				B566FCCD1FBA61A500EB6B88 /* AppDelegate.swift in Sources */,
 				B566FD1C1FBB4F1B00EB6B88 /* HistoricalStockViewController.swift in Sources */,

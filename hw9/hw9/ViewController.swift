@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import CoreData
 import Alamofire
 import EasyToast
 import SearchTextField
@@ -13,7 +14,7 @@ import SwiftSpinner
 
 class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2;
+        return favorites.count;
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -22,13 +23,14 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         }
         
         // TODO: Have to replace with local storage
-        var stocks = ["AAPL","GOOG"];
-        var prices = [47.04,988.20];
-        var change = ["0.24 (0.59%)", "3.75 (0.38%)"];
+//        var stocks = ["AAPL","GOOG"];
+//        var prices = [47.04,988.20];
+//        var change = ["0.24 (0.59%)", "3.75 (0.38%)"];
         
-        cell.stockNameLabel.text = stocks[indexPath.row];
-        cell.priceLabel.text = String(format:"%f", prices[indexPath.row]);
-        cell.changeLabel.text = change[indexPath.row];
+        var favorite = self.favorites[indexPath.row];
+        cell.stockNameLabel.text = favorite["symbol"] as? String;
+        cell.priceLabel.text = String(format:"%.2f", favorite["price"] as! Float);
+        cell.changeLabel.text = String(format:"%.2f (%.2f%%)", favorite["change"] as! Float, favorite["change_percent"] as! Float);
         
         return cell;
     }
@@ -66,6 +68,41 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         return pickerLabel!;
     }
     
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        if(sortByPickerView.selectedRow(inComponent: 0) == 0) {
+            if(orderPickerView.selectedRow(inComponent: 0) == 0) {
+                self.favorites.sort { ($0["id"] as! Float) < ($1["id"] as! Float)};
+            } else {
+                self.favorites.sort { ($0["id"] as! Float) > ($1["id"] as! Float)};
+            }
+        } else if(sortByPickerView.selectedRow(inComponent: 0) == 1) {
+            if(orderPickerView.selectedRow(inComponent: 0) == 0) {
+                self.favorites.sort { ($0["symbol"] as! String) < ($1["symbol"] as! String)};
+            } else {
+                self.favorites.sort { ($0["symbol"] as! String) > ($1["symbol"] as! String)};
+            }
+        } else if(sortByPickerView.selectedRow(inComponent: 0) == 2) {
+            if(orderPickerView.selectedRow(inComponent: 0) == 0) {
+                self.favorites.sort { ($0["price"] as! Float) < ($1["price"] as! Float)};
+            } else {
+                self.favorites.sort { ($0["price"] as! Float) > ($1["price"] as! Float)};
+            }
+        } else if(sortByPickerView.selectedRow(inComponent: 0) == 3) {
+            if(orderPickerView.selectedRow(inComponent: 0) == 0) {
+                self.favorites.sort { ($0["change"] as! Float) < ($1["change"] as! Float)};
+            } else {
+                self.favorites.sort { ($0["change"] as! Float) > ($1["change"] as! Float)};
+            }
+        } else if(sortByPickerView.selectedRow(inComponent: 0) == 4) {
+            if(orderPickerView.selectedRow(inComponent: 0) == 0) {
+                self.favorites.sort { ($0["change_percent"] as! Float) < ($1["change_percent"] as! Float)};
+            } else {
+                self.favorites.sort { ($0["change_percent"] as! Float) > ($1["change_percent"] as! Float)};
+            }
+        }
+        self.favoritesTableView.reloadData();
+    }
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder();
         getQuote((Any).self);
@@ -84,6 +121,7 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
     @IBOutlet var activityIndicator: UIActivityIndicatorView!
     let sortByOptions = ["Default", "Symbol", "Price", "Change", "Change %"];
     let orderOptions = ["Ascending", "Descending"];
+    var favorites = [Dictionary<String, Any>]();
     let autocompleteUrl = "http://isydfq.us-west-1.elasticbeanstalk.com/autocomplete?queryText=";
     
     override func viewDidLoad() {
@@ -132,6 +170,22 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
                 }
             }
         }
+        
+        // Set up favorites table
+        if let path = Bundle.main.path(forResource: "Favorites", ofType: "plist"), let dict = NSDictionary(contentsOfFile: path) as? [String: AnyObject] {
+            for (key,value) in dict {
+                if key != "id" {
+                    var dict = Dictionary<String, Any>();
+                    dict["symbol"] = key.uppercased();
+                    dict["price"] = value["price"] as! Float;
+                    dict["change"] = value["change"] as! Float;
+                    dict["change_percent"] = value["change_percent"] as! Float;
+                    dict["id"] = value["id"] as! Float;
+                    self.favorites.append(dict);
+                }
+            }
+        }
+        self.favorites.sort { ($0["id"] as! Float) < ($1["id"] as! Float)};
         
         // Adding tap gesture recognizer to dismiss keyboard
         self.hideKeyboardWhenTappedAround();

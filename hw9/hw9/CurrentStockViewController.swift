@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import CoreData
 import Alamofire
 import SwiftMoment
 import WebKit
@@ -158,6 +159,21 @@ class CurrentStockViewController: UIViewController, UITableViewDataSource, UITab
     
     @IBAction func toggleFavorite(_ sender: Any) {
         print("Toggle Favorite");
+//        let favorite: Favorite = Favorite(id: 0, stockSymbol: self.stockData["symbol"] as! String, price: self.stockData["last_price"] as! Float, change: self.stockData["change"] as! Float, changePercent: self.stockData["change_percent"] as! Float);
+        let plistFileName = "Favorites.plist";
+        let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true);
+        let documentPath = paths[0] as NSString;
+        let plistPath = documentPath.appendingPathComponent(plistFileName);
+        var favoritesArray: NSMutableArray?;
+//        if let path = Bundle.main.path(forResource: "Favorites", ofType: "plist") {
+//            favoritesArray = NSMutableArray.init(contentsOfFile: path);
+//        }
+//        if favoritesArray.count == 0 {
+//
+//        }
+        
+        
+        
     }
     
     @IBAction func changeIndicator(_ sender: Any) {

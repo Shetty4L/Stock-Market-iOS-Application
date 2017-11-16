@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>tsla</key>
+	<dict>
+		<key>price</key>
+		<real>87.2</real>
+		<key>change</key>
+		<real>0.57</real>
+		<key>change_percent</key>
+		<real>0.23</real>
+		<key>id</key>
+		<integer>1</integer>
+	</dict>
+	<key>id</key>
+	<integer>2</integer>
+	<key>aapl</key>
+	<dict>
+		<key>price</key>
+		<integer>123</integer>
+		<key>change</key>
+		<real>1.23</real>
+		<key>change_percent</key>
+		<real>0.5600000000000001</real>
+		<key>id</key>
+		<integer>2</integer>
+	</dict>
+</dict>
+</plist>
