@@ -92,6 +92,11 @@ class CurrentStockViewController: UIViewController, UITableViewDataSource, UITab
                     cell.stockDetailValue.attributedText = attributedString;
                 } else {
                     cell.stockDetailValue.textColor = UIColor.black;
+                    if self.stockData["symbol"] == nil {
+                        cell.stockDetailValue.attributedText = NSMutableAttributedString(string: "");
+                    } else {
+                        cell.stockDetailValue.attributedText = attributedString;
+                    }
                 }
             }
         } else {
@@ -109,6 +114,7 @@ class CurrentStockViewController: UIViewController, UITableViewDataSource, UITab
     @IBOutlet var currentStockTableView: UITableView!
     @IBOutlet var indicatorWebView: WKWebView!
     @IBOutlet var indicatorPicker: UIPickerView!
+    @IBOutlet weak var currentStockDetailsActivityIndicator: UIActivityIndicatorView!
     @IBOutlet var currentStockActivityIndicator: UIActivityIndicatorView!
     var stockData: Dictionary<String, Any>!;
     var indicatorData: Dictionary<String, Any>!;
@@ -124,7 +130,7 @@ class CurrentStockViewController: UIViewController, UITableViewDataSource, UITab
         let data = [
             "symbol": self.stockData["symbol"] as! String
         ];
-        self.currentStockActivityIndicator.startAnimating();
+        self.currentStockDetailsActivityIndicator.startAnimating();
         let jsonData = try! JSONSerialization.data(withJSONObject: data, options: [])
         let jsonString = String(data: jsonData, encoding: String.Encoding.utf8)!
         self.indicatorWebView.evaluateJavaScript("returnDataForFacebook(\(jsonString))") { result, error in
@@ -144,7 +150,7 @@ class CurrentStockViewController: UIViewController, UITableViewDataSource, UITab
                         let content: FBSDKShareLinkContent = FBSDKShareLinkContent();
                         content.contentURL =  URL(string: exportUrl)
                         
-                        self.currentStockActivityIndicator.stopAnimating();
+                        self.currentStockDetailsActivityIndicator.stopAnimating();
                         let dialog : FBSDKShareDialog = FBSDKShareDialog();
                         dialog.delegate = self;
                         dialog.fromViewController = self;
@@ -165,27 +171,27 @@ class CurrentStockViewController: UIViewController, UITableViewDataSource, UITab
             var dict = Dictionary<String, Any>();
             dict["id"] = 1;
             dict["symbol"] = self.stockData["symbol"] as! String;
-            dict["price"] = self.stockData["last_price"] as! Float;
-            dict["change"] = self.stockData["change"] as! Float;
-            dict["change_percent"] = self.stockData["change_percent"] as! Float;
+//            dict["price"] = self.stockData["last_price"] as! Float;
+//            dict["change"] = self.stockData["change"] as! Float;
+//            dict["change_percent"] = self.stockData["change_percent"] as! Float;
             
             let favorites: [String: Any] = [self.stockData["symbol"] as! String: dict];
             userDefaults.setValue(favorites, forKeyPath: "favorites");
             userDefaults.set(1, forKey: "id");
+            self.favoriteButton.setImage(UIImage(named: "filled-fav.png"), for: .normal);
         } else {
             if var favorites = userDefaults.object(forKey: "favorites") as? Dictionary<String, Any> {
                 if let _ = favorites[self.stockData["symbol"] as! String] {
                     favorites.removeValue(forKey: self.stockData["symbol"] as! String);
                     userDefaults.setValue(favorites, forKeyPath: "favorites");
-                    userDefaults.set(userDefaults.integer(forKey: "id")-1, forKey: "id");
                     self.favoriteButton.setImage(UIImage(named: "fav.png"), for: .normal);
                 } else {
                     var dict = Dictionary<String, Any>();
                     dict["id"] = userDefaults.integer(forKey: "id")+1;
                     dict["symbol"] = self.stockData["symbol"] as! String;
-                    dict["price"] = self.stockData["last_price"] as! Float;
-                    dict["change"] = self.stockData["change"] as! Float;
-                    dict["change_percent"] = self.stockData["change_percent"] as! Float;
+//                    dict["price"] = self.stockData["last_price"] as! Float;
+//                    dict["change"] = self.stockData["change"] as! Float;
+//                    dict["change_percent"] = self.stockData["change_percent"] as! Float;
                     
                     favorites[self.stockData["symbol"] as! String] = dict;
                     userDefaults.setValue(favorites, forKeyPath: "favorites");
@@ -225,16 +231,18 @@ class CurrentStockViewController: UIViewController, UITableViewDataSource, UITab
 
         // Do any additional setup after loading the view.
         
-        // Set up favorite button
-        let favorites = UserDefaults.standard.object(forKey: "favorites") as? Dictionary<String, Any>;
-        if let _ = favorites![self.stockData["symbol"] as! String] {
-            self.favoriteButton.setImage(UIImage(named: "filled-fav.png"), for: .normal);
-        } else {
-            self.favoriteButton.setImage(UIImage(named: "fav.png"), for: .normal);
+        // Disable UI if stock data not fetch
+        if self.stockData["symbol"] == nil {
+            self.facebookButton.isEnabled = false;
+            self.favoriteButton.isEnabled = false;
+            self.indicatorPicker.isUserInteractionEnabled = false;
+            self.changeButton.isEnabled = false;
         }
         
         // Set up acitivity indicator
+        self.currentStockDetailsActivityIndicator.hidesWhenStopped = true;        
         self.currentStockActivityIndicator.hidesWhenStopped = true;
+        self.currentStockActivityIndicator.center = self.indicatorWebView.center;
         
         // Setup scroll view
         self.currentStockScrollView.contentSize = CGSize(width: self.view.frame.width, height: 1000);
@@ -263,6 +271,15 @@ class CurrentStockViewController: UIViewController, UITableViewDataSource, UITab
         let fileURL = URL(fileURLWithPath: Bundle.main.path(forResource: "current-stock-indicator", ofType: "html")!);
         self.indicatorWebView.loadFileURL(fileURL, allowingReadAccessTo: fileURL);
         
+        // Set up favorite button
+        let favorites = UserDefaults.standard.object(forKey: "favorites") as? Dictionary<String, Any>;
+        if let symbol = self.stockData["symbol"] {
+            if let _ = favorites?[symbol as! String] {
+                self.favoriteButton.setImage(UIImage(named: "filled-fav.png"), for: .normal);
+            } else {
+                self.favoriteButton.setImage(UIImage(named: "fav.png"), for: .normal);
+            }
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -272,6 +289,14 @@ class CurrentStockViewController: UIViewController, UITableViewDataSource, UITab
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        // Disable UI if stock data not fetch
+        if self.stockData["symbol"] == nil {
+            self.facebookButton.isEnabled = false;
+            self.favoriteButton.isEnabled = false;
+            self.indicatorPicker.isUserInteractionEnabled = false;
+            self.changeButton.isEnabled = false;
+        }
         
         print("Current Stock View Controller Will Appear")
     }
@@ -307,7 +332,7 @@ class CurrentStockViewController: UIViewController, UITableViewDataSource, UITab
             return;
         }
         
-        guard let timestamp = self.stockData?["timestamp"] else {
+        guard let timestamp = self.stockData?["timestamp_app"] else {
             dataLoadFailureToast();
             return;
         }
@@ -360,11 +385,13 @@ class CurrentStockViewController: UIViewController, UITableViewDataSource, UITab
 extension CurrentStockViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         print("Executing WK");
+        self.indicatorPicker.isUserInteractionEnabled = false;
         self.facebookButton.isEnabled = true;
         self.currentStockActivityIndicator.stopAnimating();
         if(self.stockData["symbol"] == nil) {
             let error = "'Failed to load indicator data'";
             self.indicatorWebView.evaluateJavaScript("displayError(\(error))") { result, error in
+                self.indicatorPicker.isUserInteractionEnabled = true;
                 guard error == nil else {
                     print(error!);
                     return;
@@ -377,6 +404,7 @@ extension CurrentStockViewController: WKNavigationDelegate {
             let jsonData = try! JSONSerialization.data(withJSONObject: self.stockData ?? "Error!", options: [])
             let jsonString = String(data: jsonData, encoding: String.Encoding.utf8)!
             self.indicatorWebView.evaluateJavaScript("plotPrice(\(jsonString))") { result, error in
+                self.indicatorPicker.isUserInteractionEnabled = true;
                 guard error == nil else {
                     print(error!);
                     return;
@@ -386,6 +414,7 @@ extension CurrentStockViewController: WKNavigationDelegate {
             let jsonData = try! JSONSerialization.data(withJSONObject: self.indicatorData ?? "Error!", options: [])
             let jsonString = String(data: jsonData, encoding: String.Encoding.utf8)!
             self.indicatorWebView.evaluateJavaScript("plotIndicator(\(jsonString))") { result, error in
+                self.indicatorPicker.isUserInteractionEnabled = true;
                 guard error == nil else {
                     print(error!);
                     return;

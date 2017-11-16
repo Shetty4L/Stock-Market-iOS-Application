@@ -390,7 +390,8 @@
             var displayError = function(msg) {
                 var error = document.getElementById("errorMsg");
                 error.style.display = "block";
-                error.innerHTML = "<h1>" + msg + "</h1>";
+                error.style.textAlign = "center";
+                error.innerHTML = "<h4>" + msg + "</h4>";
             }
         
             var returnDataForFacebook = function(stock) {

@@ -22,19 +22,45 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
             fatalError("The dequeued cell is not an instance of FavoritesTableViewCell");
         }
         
-        // TODO: Have to replace with local storage
-//        var stocks = ["AAPL","GOOG"];
-//        var prices = [47.04,988.20];
-//        var change = ["0.24 (0.59%)", "3.75 (0.38%)"];
-        
         var favorite = self.favorites[indexPath.row];
         cell.stockNameLabel.text = favorite["symbol"] as? String;
         cell.priceLabel.text = String(format:"$%.2f", favorite["price"] as! Float);
-        cell.changeLabel.text = String(format:"%.2f (%.2f%%)", favorite["change"] as! Float, favorite["change_percent"] as! Float);
+        
+        let change = favorite["change"] as! Float;
+        let attributedString = NSMutableAttributedString(string: String(format:"%.2f (%.2f%%)", favorite["change"] as! Float, favorite["change_percent"] as! Float));
+        let attachment = NSTextAttachment();
+        if change > 0 {
+            cell.changeLabel.textColor = UIColor.green;
+            attachment.image = UIImage(named: "Up.png");
+            cell.changeLabel.attributedText = attributedString;
+        } else if change < 0 {
+            cell.changeLabel.textColor = UIColor.red;
+            attachment.image = UIImage(named: "Down.png");
+            cell.changeLabel.attributedText = attributedString;
+        } else {
+            cell.changeLabel.textColor = UIColor.black;
+            cell.changeLabel.attributedText = attributedString;
+        }
         
         return cell;
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let stockSymbol = self.favorites[indexPath.row]["symbol"] as? String;
+        self.performSegue(withIdentifier: "getStockQuote", sender: stockSymbol);
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        tableView.beginUpdates();
+        if editingStyle == .delete {
+            var favorites = UserDefaults.standard.object(forKey: "favorites") as? Dictionary<String, Any>;
+            favorites?.removeValue(forKey: self.favorites[indexPath.row]["symbol"] as! String);
+            UserDefaults.standard.setValue(favorites, forKeyPath: "favorites");
+            self.favorites.remove(at: indexPath.row);
+            tableView.deleteRows(at: [indexPath], with: .automatic);
+        }
+        tableView.endUpdates();
+    }
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1;
@@ -69,12 +95,11 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        orderPickerView.isUserInteractionEnabled = true;
         if(sortByPickerView.selectedRow(inComponent: 0) == 0) {
-            if(orderPickerView.selectedRow(inComponent: 0) == 0) {
-                self.favorites.sort { ($0["id"] as! Float) < ($1["id"] as! Float)};
-            } else {
-                self.favorites.sort { ($0["id"] as! Float) > ($1["id"] as! Float)};
-            }
+            orderPickerView.selectRow(0, inComponent: 0, animated: true);
+            orderPickerView.isUserInteractionEnabled = false;
+            self.favorites.sort { ($0["id"] as! Float) < ($1["id"] as! Float)};
         } else if(sortByPickerView.selectedRow(inComponent: 0) == 1) {
             if(orderPickerView.selectedRow(inComponent: 0) == 0) {
                 self.favorites.sort { ($0["symbol"] as! String) < ($1["symbol"] as! String)};
@@ -123,6 +148,7 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
     let orderOptions = ["Ascending", "Descending"];
     var favorites = [Dictionary<String, Any>]();
     let autocompleteUrl = "http://isydfq.us-west-1.elasticbeanstalk.com/autocomplete?queryText=";
+    let getStockQuoteUrl = "http://isydfq.us-west-1.elasticbeanstalk.com/stock?";
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -133,6 +159,8 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         self.sortByPickerView.dataSource = self;
         
         // Connect orderPickerView
+        self.orderPickerView.selectRow(0, inComponent: 0, animated: true);
+        self.orderPickerView.isUserInteractionEnabled = false;
         self.orderPickerView.delegate = self;
         self.orderPickerView.dataSource = self;
         
@@ -145,6 +173,7 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
         
         // Hide activity indicator when app loads
         self.activityIndicator.stopAnimating();
+        self.activityIndicator.center = self.favoritesTableView.center;
         
         // Customize the stockTextField
         self.stockTextField.theme.cellHeight = 50;
@@ -177,22 +206,14 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
     
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.setNavigationBarHidden(true, animated: true);
+        
+        // Reset the order by picker view
+        self.orderPickerView.selectRow(0, inComponent: 0, animated: true);
+        self.orderPickerView.isUserInteractionEnabled = false;
         // Set up favorites table
-        self.favorites.removeAll(keepingCapacity: true);
-        var favorites = UserDefaults.standard.object(forKey: "favorites") as? Dictionary<String, Dictionary<String, Any>>;
-        for (_,value) in favorites! {
-            var dict = Dictionary<String, Any>();
-            dict["id"] = value["id"] as! Float;
-            dict["symbol"] = value["symbol"] as! String;
-            dict["price"] = value["price"] as! Float;
-            dict["change"] = value["change"] as! Float;
-            dict["change_percent"] = value["change_percent"] as! Float;
-            self.favorites.append(dict);
-        }
-        self.favorites.sort { ($0["id"] as! Float) < ($1["id"] as! Float)};
-        self.favoritesTableView.reloadData();
+        self.reloadFavoritesTable();
     }
-
+    
     override func viewWillDisappear(_ animated: Bool) {
         self.navigationController?.navigationBar.isTranslucent = false;
         self.navigationController?.setNavigationBarHidden(false, animated: true);
@@ -229,6 +250,69 @@ class ViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSo
     
     @IBAction func clearTextField(_ sender: Any) {
         stockTextField.text = "";
+    }
+    
+    @IBAction func autoRefresh(_ sender: UISwitch) {
+        if sender.isOn {
+            let _: Timer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { (Timer) in
+                self.favorites.removeAll(keepingCapacity: true);
+                self.reloadFavoritesTable();
+            }
+        }
+    }
+    
+    @IBAction func manualRefresh(_ sender: Any) {
+        reloadFavoritesTable();
+    }
+    
+    private func reloadFavoritesTable() {
+        self.activityIndicator.startAnimating();
+        self.manualRefreshButton.isEnabled = false;
+        self.autoRefreshSwitch.isEnabled = false;
+        self.sortByPickerView.isUserInteractionEnabled = false;
+        self.orderPickerView.isUserInteractionEnabled = false;
+        
+        self.favorites.removeAll(keepingCapacity: true);
+        self.favoritesTableView.reloadData();
+        let group = DispatchGroup()
+        let favorites = UserDefaults.standard.object(forKey: "favorites") as? Dictionary<String, Dictionary<String, Any>>;
+        if favorites != nil {
+            for (key,value) in favorites! {
+                group.enter()
+                var dict = Dictionary<String, Any>();
+                Alamofire.request(getStockQuoteUrl + "outputsize=compact&stockSymbol=" + key).responseJSON { response in
+                    if let json = response.result.value as? Dictionary<String, Any>{
+                        dict["id"] = value["id"] as! Float;
+                        dict["symbol"] = key;
+                        if json["error"] == nil || json["symbol"] != nil {
+                            dict["price"] = json["last_price"] as! Float;
+                            dict["change"] = json["change"] as! Float;
+                            dict["change_percent"] = json["change_percent"] as! Float;
+                            self.favorites.append(dict);
+                        } else {
+                            self.view.showToast("Failed to fetch data for " + key, position: .bottom, popTime: 1, dismissOnTap: true);
+                        }
+                    }
+                    group.leave()
+                }
+            }
+            group.notify(queue: DispatchQueue.main) {
+                self.activityIndicator.stopAnimating();
+                self.manualRefreshButton.isEnabled = true;
+                self.autoRefreshSwitch.isEnabled = true;
+                self.sortByPickerView.isUserInteractionEnabled = true;
+                print(self.sortByPickerView.selectedRow(inComponent: 0));
+                if self.sortByPickerView.selectedRow(inComponent: 0) == 0 {
+                    self.orderPickerView.isUserInteractionEnabled = false;
+                } else {
+                    self.orderPickerView.isUserInteractionEnabled = true;
+                }
+                self.sortByPickerView.selectRow(0, inComponent: 0, animated: true);
+                self.orderPickerView.selectRow(0, inComponent: 0, animated: true);
+                self.favorites.sort { ($0["id"] as! Float) < ($1["id"] as! Float)};
+                self.favoritesTableView.reloadData();
+            }
+        }
     }
     
 }

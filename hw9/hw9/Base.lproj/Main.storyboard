@@ -32,11 +32,6 @@
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <activityIndicatorView contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" hidesWhenStopped="YES" animating="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="rdy-gL-SVR">
-                                <rect key="frame" x="177" y="323" width="20" height="20"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="color" red="0.20784313730000001" green="0.90588235289999997" blue="0.63529411759999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            </activityIndicatorView>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="nGA-3G-T8a">
                                 <rect key="frame" x="16" y="290" width="343" height="357"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -129,6 +124,9 @@
                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="85Z-1a-ve0">
                                 <rect key="frame" x="272" y="191" width="49" height="31"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <connections>
+                                    <action selector="autoRefresh:" destination="BYZ-38-t0r" eventType="valueChanged" id="vYz-21-f38"/>
+                                </connections>
                             </switch>
                             <pickerView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AFx-N0-HfV">
                                 <rect key="frame" x="81" y="232" width="100" height="50"/>
@@ -150,7 +148,15 @@
                                 <state key="normal" image="icons8-refresh (2).png">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
+                                <connections>
+                                    <action selector="manualRefresh:" destination="BYZ-38-t0r" eventType="touchUpInside" id="bvs-Dj-vh4"/>
+                                </connections>
                             </button>
+                            <activityIndicatorView contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" hidesWhenStopped="YES" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="rdy-gL-SVR">
+                                <rect key="frame" x="15" y="348" width="343" height="37"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="color" red="0.20784313730000001" green="0.90588235289999997" blue="0.63529411759999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" red="0.20784313725490194" green="0.90588235294117647" blue="0.63529411764705879" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
@@ -368,7 +374,12 @@
                                             <wkPreferences key="preferences"/>
                                         </wkWebViewConfiguration>
                                     </wkWebView>
-                                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="Yt4-j4-ucL">
+                                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="Yt4-j4-ucL">
+                                        <rect key="frame" x="169" y="471.5" width="37" height="37"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="color" red="0.20784313730000001" green="0.90588235289999997" blue="0.63529411759999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </activityIndicatorView>
+                                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="AQW-KJ-VCm">
                                         <rect key="frame" x="169" y="471.5" width="37" height="37"/>
                                         <color key="color" red="0.20784313730000001" green="0.90588235289999997" blue="0.63529411759999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     </activityIndicatorView>
@@ -381,14 +392,16 @@
                                         </connections>
                                     </button>
                                 </subviews>
+                                <constraints>
+                                    <constraint firstItem="AQW-KJ-VCm" firstAttribute="centerX" secondItem="SVc-cE-Ovl" secondAttribute="centerX" id="HkN-rI-Pvs"/>
+                                    <constraint firstItem="AQW-KJ-VCm" firstAttribute="centerY" secondItem="SVc-cE-Ovl" secondAttribute="centerY" id="oOC-wc-aVh"/>
+                                </constraints>
                             </scrollView>
                         </subviews>
                         <constraints>
                             <constraint firstItem="SVc-cE-Ovl" firstAttribute="trailing" secondItem="ftD-rV-QfU" secondAttribute="trailing" id="4BS-mu-Sil"/>
                             <constraint firstItem="SVc-cE-Ovl" firstAttribute="bottom" secondItem="ftD-rV-QfU" secondAttribute="bottom" id="DOs-r5-f27"/>
                             <constraint firstItem="SVc-cE-Ovl" firstAttribute="leading" secondItem="ftD-rV-QfU" secondAttribute="leading" id="Y23-Rq-NOc"/>
-                            <constraint firstItem="Yt4-j4-ucL" firstAttribute="centerY" secondItem="ftD-rV-QfU" secondAttribute="centerY" id="ekb-YL-t7X"/>
-                            <constraint firstItem="Yt4-j4-ucL" firstAttribute="centerX" secondItem="ftD-rV-QfU" secondAttribute="centerX" id="mMw-md-wfw"/>
                             <constraint firstItem="SVc-cE-Ovl" firstAttribute="top" secondItem="ftD-rV-QfU" secondAttribute="top" id="q0Z-yl-KzX"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="ftD-rV-QfU"/>
@@ -397,6 +410,7 @@
                     <connections>
                         <outlet property="changeButton" destination="0eh-Tv-C8L" id="0Bf-nL-uCg"/>
                         <outlet property="currentStockActivityIndicator" destination="Yt4-j4-ucL" id="Qvc-NG-PiM"/>
+                        <outlet property="currentStockDetailsActivityIndicator" destination="AQW-KJ-VCm" id="iWQ-Il-ZpF"/>
                         <outlet property="currentStockScrollView" destination="SVc-cE-Ovl" id="DG6-dt-d4C"/>
                         <outlet property="currentStockTableView" destination="kzC-av-7ss" id="IVH-Zy-DG2"/>
                         <outlet property="facebookButton" destination="Z5c-Zb-2yt" id="6vy-YD-b1P"/>
