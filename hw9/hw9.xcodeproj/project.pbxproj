@@ -7,14 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B53000B51FCF967700A655B6 /* refresh.png in Resources */ = {isa = PBXBuildFile; fileRef = B53000B11FCF967600A655B6 /* refresh.png */; };
+		B53000B61FCF967700A655B6 /* empty.png in Resources */ = {isa = PBXBuildFile; fileRef = B53000B21FCF967600A655B6 /* empty.png */; };
+		B53000B71FCF967700A655B6 /* fb.png in Resources */ = {isa = PBXBuildFile; fileRef = B53000B31FCF967700A655B6 /* fb.png */; };
+		B53000B81FCF967700A655B6 /* filled.png in Resources */ = {isa = PBXBuildFile; fileRef = B53000B41FCF967700A655B6 /* filled.png */; };
+		B53000BA1FCF992E00A655B6 /* stock-market.png in Resources */ = {isa = PBXBuildFile; fileRef = B53000B91FCF992E00A655B6 /* stock-market.png */; };
+		B53000BB1FCF9A6000A655B6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B566FCEE1FBA6DB000EB6B88 /* Assets.xcassets */; };
 		B566FCCD1FBA61A500EB6B88 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B566FCCC1FBA61A500EB6B88 /* AppDelegate.swift */; };
 		B566FCCF1FBA61A500EB6B88 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B566FCCE1FBA61A500EB6B88 /* ViewController.swift */; };
 		B566FCD21FBA61A500EB6B88 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B566FCD01FBA61A500EB6B88 /* Main.storyboard */; };
 		B566FCD71FBA61A500EB6B88 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B566FCD51FBA61A500EB6B88 /* LaunchScreen.storyboard */; };
 		B566FCE21FBA61A500EB6B88 /* hw9Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B566FCE11FBA61A500EB6B88 /* hw9Tests.swift */; };
-		B566FCF71FBA7E0C00EB6B88 /* icons8-refresh (1).png in Resources */ = {isa = PBXBuildFile; fileRef = B566FCF41FBA7E0C00EB6B88 /* icons8-refresh (1).png */; };
-		B566FCF81FBA7E0C00EB6B88 /* icons8-refresh (2).png in Resources */ = {isa = PBXBuildFile; fileRef = B566FCF51FBA7E0C00EB6B88 /* icons8-refresh (2).png */; };
-		B566FCF91FBA7E0C00EB6B88 /* icons8-refresh.png in Resources */ = {isa = PBXBuildFile; fileRef = B566FCF61FBA7E0C00EB6B88 /* icons8-refresh.png */; };
 		B566FCFB1FBA81D800EB6B88 /* FavoritesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B566FCFA1FBA81D800EB6B88 /* FavoritesTableViewCell.swift */; };
 		B566FD041FBA905300EB6B88 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B566FCFC1FBA8D4E00EB6B88 /* Alamofire.framework */; };
 		B566FD051FBA905300EB6B88 /* Alamofire.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B566FCFC1FBA8D4E00EB6B88 /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -22,9 +25,6 @@
 		B566FD191FBB4EF300EB6B88 /* CurrentStockViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B566FD181FBB4EF300EB6B88 /* CurrentStockViewController.swift */; };
 		B566FD1C1FBB4F1B00EB6B88 /* HistoricalStockViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B566FD1B1FBB4F1B00EB6B88 /* HistoricalStockViewController.swift */; };
 		B566FD1F1FBB4F5500EB6B88 /* NewsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B566FD1E1FBB4F5500EB6B88 /* NewsViewController.swift */; };
-		B566FD211FBB62C600EB6B88 /* icons8-facebook.png in Resources */ = {isa = PBXBuildFile; fileRef = B566FD201FBB62C500EB6B88 /* icons8-facebook.png */; };
-		B566FD241FBB6AFE00EB6B88 /* filled-fav.png in Resources */ = {isa = PBXBuildFile; fileRef = B566FD221FBB6AFC00EB6B88 /* filled-fav.png */; };
-		B566FD251FBB6AFE00EB6B88 /* fav.png in Resources */ = {isa = PBXBuildFile; fileRef = B566FD231FBB6AFD00EB6B88 /* fav.png */; };
 		B566FD271FBB6D0F00EB6B88 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B566FD261FBB6CE000EB6B88 /* WebKit.framework */; };
 		B566FD2B1FBB7A9600EB6B88 /* CurrentStockTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B566FD2A1FBB7A9500EB6B88 /* CurrentStockTableViewCell.swift */; };
 		B566FD2E1FBBA72F00EB6B88 /* NewsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B566FD2D1FBBA72E00EB6B88 /* NewsTableViewCell.swift */; };
@@ -86,6 +86,11 @@
 /* Begin PBXFileReference section */
 		0C2D16EFC0E737F6A7514E6E /* Pods-hw9.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-hw9.release.xcconfig"; path = "Pods/Target Support Files/Pods-hw9/Pods-hw9.release.xcconfig"; sourceTree = "<group>"; };
 		90EDF84C0DDEBE39811094D0 /* Pods-hw9.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-hw9.debug.xcconfig"; path = "Pods/Target Support Files/Pods-hw9/Pods-hw9.debug.xcconfig"; sourceTree = "<group>"; };
+		B53000B11FCF967600A655B6 /* refresh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = refresh.png; path = ../../../../../../../Pictures/refresh.png; sourceTree = "<group>"; };
+		B53000B21FCF967600A655B6 /* empty.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = empty.png; path = ../../../../../../../Pictures/empty.png; sourceTree = "<group>"; };
+		B53000B31FCF967700A655B6 /* fb.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = fb.png; path = ../../../../../../../Pictures/fb.png; sourceTree = "<group>"; };
+		B53000B41FCF967700A655B6 /* filled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = filled.png; path = ../../../../../../../Pictures/filled.png; sourceTree = "<group>"; };
+		B53000B91FCF992E00A655B6 /* stock-market.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "stock-market.png"; path = "../../../../../../../Pictures/stock-market.png"; sourceTree = "<group>"; };
 		B566FCC91FBA61A500EB6B88 /* hw9.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = hw9.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B566FCCC1FBA61A500EB6B88 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B566FCCE1FBA61A500EB6B88 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -96,18 +101,12 @@
 		B566FCE11FBA61A500EB6B88 /* hw9Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = hw9Tests.swift; sourceTree = "<group>"; };
 		B566FCE31FBA61A500EB6B88 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B566FCEE1FBA6DB000EB6B88 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = /Users/shetty4l/Sites/csci571/ISYDFQ/hw9/hw9/hw9/Assets.xcassets; sourceTree = "<absolute>"; };
-		B566FCF41FBA7E0C00EB6B88 /* icons8-refresh (1).png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "icons8-refresh (1).png"; path = "../../../../../../../Pictures/icons8-refresh (1).png"; sourceTree = "<group>"; };
-		B566FCF51FBA7E0C00EB6B88 /* icons8-refresh (2).png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "icons8-refresh (2).png"; path = "../../../../../../../Pictures/icons8-refresh (2).png"; sourceTree = "<group>"; };
-		B566FCF61FBA7E0C00EB6B88 /* icons8-refresh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "icons8-refresh.png"; path = "../../../../../../../Pictures/icons8-refresh.png"; sourceTree = "<group>"; };
 		B566FCFA1FBA81D800EB6B88 /* FavoritesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FavoritesTableViewCell.swift; path = /Users/shetty4l/Sites/csci571/ISYDFQ/hw9/hw9/hw9/FavoritesTableViewCell.swift; sourceTree = "<absolute>"; };
 		B566FCFC1FBA8D4E00EB6B88 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
 		B566FD141FBACA2200EB6B88 /* StockDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockDetailsViewController.swift; sourceTree = "<group>"; };
 		B566FD181FBB4EF300EB6B88 /* CurrentStockViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentStockViewController.swift; sourceTree = "<group>"; };
 		B566FD1B1FBB4F1B00EB6B88 /* HistoricalStockViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoricalStockViewController.swift; sourceTree = "<group>"; };
 		B566FD1E1FBB4F5500EB6B88 /* NewsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsViewController.swift; sourceTree = "<group>"; };
-		B566FD201FBB62C500EB6B88 /* icons8-facebook.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icons8-facebook.png"; sourceTree = "<group>"; };
-		B566FD221FBB6AFC00EB6B88 /* filled-fav.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "filled-fav.png"; sourceTree = "<group>"; };
-		B566FD231FBB6AFD00EB6B88 /* fav.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fav.png; sourceTree = "<group>"; };
 		B566FD261FBB6CE000EB6B88 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		B566FD2A1FBB7A9500EB6B88 /* CurrentStockTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentStockTableViewCell.swift; sourceTree = "<group>"; };
 		B566FD2D1FBBA72E00EB6B88 /* NewsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsTableViewCell.swift; sourceTree = "<group>"; };
@@ -240,14 +239,13 @@
 		B566FCF31FBA7DE800EB6B88 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				B53000B91FCF992E00A655B6 /* stock-market.png */,
+				B53000B21FCF967600A655B6 /* empty.png */,
+				B53000B31FCF967700A655B6 /* fb.png */,
+				B53000B41FCF967700A655B6 /* filled.png */,
+				B53000B11FCF967600A655B6 /* refresh.png */,
 				B566FD411FBCB2A700EB6B88 /* Down.png */,
 				B566FD401FBCB2A600EB6B88 /* Up.png */,
-				B566FD231FBB6AFD00EB6B88 /* fav.png */,
-				B566FD221FBB6AFC00EB6B88 /* filled-fav.png */,
-				B566FD201FBB62C500EB6B88 /* icons8-facebook.png */,
-				B566FCF41FBA7E0C00EB6B88 /* icons8-refresh (1).png */,
-				B566FCF51FBA7E0C00EB6B88 /* icons8-refresh (2).png */,
-				B566FCF61FBA7E0C00EB6B88 /* icons8-refresh.png */,
 			);
 			path = Images;
 			sourceTree = "<group>";
@@ -340,16 +338,16 @@
 			files = (
 				B566FD821FBD396A00EB6B88 /* Favorites.plist in Resources */,
 				B566FD421FBCB2AA00EB6B88 /* Up.png in Resources */,
-				B566FCF81FBA7E0C00EB6B88 /* icons8-refresh (2).png in Resources */,
+				B53000BA1FCF992E00A655B6 /* stock-market.png in Resources */,
 				B566FD3B1FBBC2FF00EB6B88 /* current-stock-indicator.html in Resources */,
+				B53000B61FCF967700A655B6 /* empty.png in Resources */,
+				B53000B51FCF967700A655B6 /* refresh.png in Resources */,
+				B53000B71FCF967700A655B6 /* fb.png in Resources */,
 				B566FCD71FBA61A500EB6B88 /* LaunchScreen.storyboard in Resources */,
-				B566FD241FBB6AFE00EB6B88 /* filled-fav.png in Resources */,
+				B53000B81FCF967700A655B6 /* filled.png in Resources */,
 				B566FCD21FBA61A500EB6B88 /* Main.storyboard in Resources */,
-				B566FD211FBB62C600EB6B88 /* icons8-facebook.png in Resources */,
+				B53000BB1FCF9A6000A655B6 /* Assets.xcassets in Resources */,
 				B566FD431FBCB2AA00EB6B88 /* Down.png in Resources */,
-				B566FCF71FBA7E0C00EB6B88 /* icons8-refresh (1).png in Resources */,
-				B566FCF91FBA7E0C00EB6B88 /* icons8-refresh.png in Resources */,
-				B566FD251FBB6AFE00EB6B88 /* fav.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -605,7 +603,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.example.hw9;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -625,7 +623,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.example.hw9;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

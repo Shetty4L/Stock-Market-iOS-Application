@@ -19,6 +19,7 @@ class HistoricalStockViewController: UIViewController {
         
         // Set up web view
         self.historicalStockWebView.navigationDelegate = self;
+        self.historicalStockWebView.uiDelegate = self;
         self.historicalStockWebView.isMultipleTouchEnabled = false;
         let fileURL = URL(fileURLWithPath: Bundle.main.path(forResource: "current-stock-indicator", ofType: "html")!);
         self.historicalStockWebView.loadFileURL(fileURL, allowingReadAccessTo: fileURL);
@@ -53,7 +54,7 @@ class HistoricalStockViewController: UIViewController {
 
 }
 
-extension HistoricalStockViewController: WKNavigationDelegate {
+extension HistoricalStockViewController: WKNavigationDelegate, WKUIDelegate {
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         if(self.stockData["symbol"] == nil) {
             let error = "'Failed to load indicator data'";
@@ -73,5 +74,12 @@ extension HistoricalStockViewController: WKNavigationDelegate {
                 return;
             }
         }
+    }
+    func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
+        print("What the fuck is going on");
+        if UIApplication.shared.canOpenURL(navigationAction.request.url!) {
+            UIApplication.shared.open(navigationAction.request.url!, options: [:], completionHandler: nil);
+        }
+        return nil;
     }
 }

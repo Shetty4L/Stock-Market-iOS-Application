@@ -178,13 +178,13 @@ class CurrentStockViewController: UIViewController, UITableViewDataSource, UITab
             let favorites: [String: Any] = [self.stockData["symbol"] as! String: dict];
             userDefaults.setValue(favorites, forKeyPath: "favorites");
             userDefaults.set(1, forKey: "id");
-            self.favoriteButton.setImage(UIImage(named: "filled-fav.png"), for: .normal);
+            self.favoriteButton.setImage(UIImage(named: "filled.png"), for: .normal);
         } else {
             if var favorites = userDefaults.object(forKey: "favorites") as? Dictionary<String, Any> {
                 if let _ = favorites[self.stockData["symbol"] as! String] {
                     favorites.removeValue(forKey: self.stockData["symbol"] as! String);
                     userDefaults.setValue(favorites, forKeyPath: "favorites");
-                    self.favoriteButton.setImage(UIImage(named: "fav.png"), for: .normal);
+                    self.favoriteButton.setImage(UIImage(named: "empty.png"), for: .normal);
                 } else {
                     var dict = Dictionary<String, Any>();
                     dict["id"] = userDefaults.integer(forKey: "id")+1;
@@ -196,7 +196,7 @@ class CurrentStockViewController: UIViewController, UITableViewDataSource, UITab
                     favorites[self.stockData["symbol"] as! String] = dict;
                     userDefaults.setValue(favorites, forKeyPath: "favorites");
                     userDefaults.set(userDefaults.integer(forKey: "id")+1, forKey: "id");
-                    self.favoriteButton.setImage(UIImage(named: "filled-fav.png"), for: .normal);
+                    self.favoriteButton.setImage(UIImage(named: "filled.png"), for: .normal);
                 }
             }
         }
@@ -267,6 +267,7 @@ class CurrentStockViewController: UIViewController, UITableViewDataSource, UITab
         self.facebookButton.isEnabled = false;
         self.currentStockActivityIndicator.startAnimating();
         self.indicatorWebView.navigationDelegate = self;
+        self.indicatorWebView.uiDelegate = self;
         self.indicatorWebView.isMultipleTouchEnabled = false;
         let fileURL = URL(fileURLWithPath: Bundle.main.path(forResource: "current-stock-indicator", ofType: "html")!);
         self.indicatorWebView.loadFileURL(fileURL, allowingReadAccessTo: fileURL);
@@ -275,9 +276,9 @@ class CurrentStockViewController: UIViewController, UITableViewDataSource, UITab
         let favorites = UserDefaults.standard.object(forKey: "favorites") as? Dictionary<String, Any>;
         if let symbol = self.stockData["symbol"] {
             if let _ = favorites?[symbol as! String] {
-                self.favoriteButton.setImage(UIImage(named: "filled-fav.png"), for: .normal);
+                self.favoriteButton.setImage(UIImage(named: "filled.png"), for: .normal);
             } else {
-                self.favoriteButton.setImage(UIImage(named: "fav.png"), for: .normal);
+                self.favoriteButton.setImage(UIImage(named: "empty.png"), for: .normal);
             }
         }
     }
@@ -370,6 +371,8 @@ class CurrentStockViewController: UIViewController, UITableViewDataSource, UITab
         numberFormatter.locale = Locale(identifier: "en_US");
         currentStockTableValues[7] = numberFormatter.string(from: NSNumber(value: volume as! IntegerLiteralType))!;
     }
+    
+    
     /*
     // MARK: - Navigation
 
@@ -382,7 +385,7 @@ class CurrentStockViewController: UIViewController, UITableViewDataSource, UITab
 
 }
 
-extension CurrentStockViewController: WKNavigationDelegate {
+extension CurrentStockViewController: WKNavigationDelegate, WKUIDelegate {
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         print("Executing WK");
         self.indicatorPicker.isUserInteractionEnabled = false;
@@ -421,5 +424,12 @@ extension CurrentStockViewController: WKNavigationDelegate {
                 }
             }
         }
+    }
+    
+    func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {        
+        if UIApplication.shared.canOpenURL(navigationAction.request.url!) {
+            UIApplication.shared.open(navigationAction.request.url!, options: [:], completionHandler: nil);
+        }
+        return nil;
     }
 }

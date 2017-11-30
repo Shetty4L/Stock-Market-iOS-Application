@@ -24,7 +24,7 @@ class StockDetailsViewController: UIViewController {
 
         // Do any additional setup after loading the view.            
         
-        // Fetch Stock Data
+        // Fetch Stock Data        
         SwiftSpinner.show("Loading data");
         Alamofire.request(getStockQuoteUrl + "outputsize=full&stockSymbol=" + stockSymbol).responseJSON { response in
             if let json = response.result.value as? Dictionary<String, Any> {
