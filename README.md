@@ -1,2 +1,11 @@
-# csci571-hw9
-Final project for CSCI 571 
+# Stock Market iOS Application
+An iOS application that provides real-time stock market information for all companies registered with the New York Stock Exchange (NYSE) and the NASDAQ. This application uses the same NodeJS backend as [Stock-Market-Application](https://github.com/Shetty4L/Stock-Market-Application) and is essentially its iOS port.
+
+## Prerequisites
+You will need XCode and essentially open this project in XCode to play around with it.
+
+## License
+This project is licensed under the MIT License - see the LICENSE.md file for details
+
+## Acknowledgements
+Special thanks to the University of Southern California and Professor Marco Papa for teaching the wonderful CSCI 571 - Web Technologies course.
